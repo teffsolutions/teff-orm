@@ -20,6 +20,7 @@ Class Model {
     $base_table = (new $__called_class())->getTable();
 
     $query = new QueryBuilder($base_table);
+
     return $query->hasMany($foreign_table, $foreign_key, $this->data[$this->getPrimaryKeyName()]);
   }
   protected function belongsTo(){
