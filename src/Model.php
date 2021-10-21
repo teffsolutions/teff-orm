@@ -1,5 +1,5 @@
 <?php 
-namespace SwimmingPool;
+namespace TeffOrm;
 
 Class Model {
 
@@ -7,7 +7,7 @@ Class Model {
 
   protected $table;
   protected $primaryKey;
-
+  
   protected $db;
 
   public function __construct(){
@@ -19,15 +19,21 @@ Class Model {
     $__called_class=get_called_class();
     $base_table = (new $__called_class())->getTable();
 
-    $query = new Query($base_table);
-
-    return $query->hasMany($foreign_table, $foreign_key, $this->data[$primaryKey]);
-
+    $query = new QueryBuilder($base_table);
+    return $query->hasMany($foreign_table, $foreign_key, $this->data[$this->getPrimaryKeyName()]);
   }
   protected function belongsTo(){
 
   }
+  protected function belongsToMany($foreign_class, $pivot_table, $pivot_local, $pivot_foreign){
 
+    $__called_class=get_called_class();
+    $base_table = (new $__called_class())->getTable();
+
+    $query = new QueryBuilder($base_table);
+    return $query->belongsToMany($this->data[$this->getPrimaryKeyName()], $foreign_class, $pivot_table, $pivot_local, $pivot_foreign);
+
+  }
   public static function find($_id){
     global $db;
     
@@ -59,7 +65,7 @@ Class Model {
 
     $base_table = (new $__called_class())->getTable();
 
-    $query = new Query($base_table);
+    $query = new QueryBuilder($base_table);
 
     return $query->leftJoin($target_table, $foreign_key, $local_key);
   }
@@ -145,13 +151,17 @@ Class Model {
       return $this;
   }
 
-  public function __get($varName){
+  public function setAttributes($_attributes){
+    foreach ($_attributes as $key => $value) {
+      $this->data[$key]=$value;
+    }
+  }
 
+  public function __get($varName){
     if (!array_key_exists($varName,$this->data)){
       return NULL;
     }
     else return $this->data[$varName];
-
   }
 
   public function __set($varName,$value){
