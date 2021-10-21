@@ -1,7 +1,7 @@
 <?php 
 namespace SwimmingPool;
 
-class Query{
+class QueryBuilder{
 
   protected $query;
 

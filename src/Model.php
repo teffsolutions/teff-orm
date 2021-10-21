@@ -19,7 +19,7 @@ Class Model {
     $__called_class=get_called_class();
     $base_table = (new $__called_class())->getTable();
 
-    $query = new Query($base_table);
+    $query = new QueryBuilder($base_table);
 
     return $query->hasMany($foreign_table, $foreign_key, $this->data[$primaryKey]);
 
@@ -59,7 +59,7 @@ Class Model {
 
     $base_table = (new $__called_class())->getTable();
 
-    $query = new Query($base_table);
+    $query = new QueryBuilder($base_table);
 
     return $query->leftJoin($target_table, $foreign_key, $local_key);
   }
